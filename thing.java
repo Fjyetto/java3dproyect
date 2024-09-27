@@ -15,10 +15,12 @@ public class thing extends JFrame {
     public Vector3 thingy = new Vector3(0.0,1.0,0.0);
     public MPanel uh = null;
     public shit mythread = null;
+    public Real genesis = new Real("Root");
     
     public thing() throws InterruptedException{
         System.out.print("SHUDGQDIUSQ\n");
         //setLayout(new FlowLayout());
+        Camera camera = genesis.Append(new Camera());
         
         setTitle("Test");
         setSize(512,512);
