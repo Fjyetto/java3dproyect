@@ -13,9 +13,25 @@ public class Vector3 {
 	public double Magnitude(){
 		return Math.sqrt((x*x+y*y+z*z));
 	}
-
-	public Vector3 Add(Vector3 v1){
+	public Vector3 Copy(){
+		Vector3 res = new Vector3(x,y,z);
+		return res;
+	}
+	public Vector3 Plus(Vector3 v1){
 		Vector3 res = new Vector3(x+v1.x,y+v1.y,z+v1.z);
+		return res;
+	}
+	public Vector3 Substract(Vector3 v1){
+		Vector3 res = new Vector3(x-v1.x,y-v1.y,z-v1.z);
+		return res;
+	}
+
+	public Vector3 Multiply(double s){
+		Vector3 res = new Vector3(x*s,y*s,z*s);
+		return res;
+	}
+	public Vector3 Multiply(Vector3 other){
+		Vector3 res = new Vector3(x*other.x,y*other.y,z*other.z);
 		return res;
 	}
 }

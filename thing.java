@@ -42,7 +42,7 @@ public class thing extends JFrame {
             double delta = 0;
             System.out.println("This thread is STARTING!!!");
 
-            Transform rot = (new Transform()).FromAxisRotation('z',.011);
+            Transform rot = (new Transform()).FromAxisRotation('z',.011);//.Multiply((new Transform()).FromAxisRotation('x',0.0031415));
 
             while (true){
                 long now = System.nanoTime();
