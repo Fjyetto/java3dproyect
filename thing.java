@@ -10,9 +10,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseMotionAdapter;
+import java.io.FileNotFoundException;
 
 public class thing extends JFrame {
-    public Vector3 thingy = new Vector3(0.0,1.0,0.0);
     public MPanel uh = null;
     public shit mythread = null;
     public Real genesis = new Real("Root");
@@ -21,7 +21,16 @@ public class thing extends JFrame {
         System.out.print("SHUDGQDIUSQ\n");
         //setLayout(new FlowLayout());
         Camera camera = genesis.Append(new Camera());
-        
+
+        Mesh cube = null;
+        try{
+            cube = Mesh.FromOBJ("JohnCube.obj");
+        } catch (FileNotFoundException e){
+            System.err.println(e);
+        }
+
+        genesis.Append(cube); // JohnCube the second child of genesis
+
         setTitle("Test");
         setSize(512,512);
         setVisible(true);
@@ -31,7 +40,7 @@ public class thing extends JFrame {
         thread.start();
         mythread=thread;
 
-        uh = new MPanel(thingy,thread);
+        uh = new MPanel(thread);
         add(uh);
         pack();
 
@@ -44,14 +53,14 @@ public class thing extends JFrame {
             double delta = 0;
             System.out.println("This thread is STARTING!!!");
 
-            Transform rot = (new Transform()).FromAxisRotation('z',.011);//.Multiply((new Transform()).FromAxisRotation('x',0.0031415));
+            //Transform rot = (new Transform()).FromAxisRotation('z',.011);//.Multiply((new Transform()).FromAxisRotation('x',0.0031415));
 
             while (true){
                 long now = System.nanoTime();
                 delta += (now-lastTime)/ns;
                 lastTime = now;
                 while (delta>=1){
-                    thingy = rot.MultiplyWV(thingy);
+                    
                     //System.out.println(thingy.x);
                     uh.repaint(0,0,512,512);
                     delta--;
@@ -67,7 +76,7 @@ public class thing extends JFrame {
         private int squareW = 50;
         private int squareH = 50;
 
-        public MPanel(Vector3 thingy,shit thready){
+        public MPanel(shit thready){
             setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
             addMouseListener(new MouseAdapter() {
@@ -107,10 +116,9 @@ public class thing extends JFrame {
             g.drawRect(squareX,squareY,squareW,squareH);
 
             //System.out.println(it.x*40.0);
+            genesis.children.get(1);
 
             g.setColor(Color.BLUE);
-            System.out.println((80.0*thingy.x));
-            g.fillRect(90+(int)(thingy.x*80.0),90+(int)(thingy.y*80.0),squareW,squareH);
         }
     }
     

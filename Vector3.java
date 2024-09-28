@@ -9,6 +9,8 @@ public class Vector3 {
 		y=sy;
 		z=sz;
 	}
+	public Vector3(){
+	}
 
 	public double Magnitude(){
 		return Math.sqrt((x*x+y*y+z*z));
