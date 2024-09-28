@@ -7,6 +7,8 @@ public class Vector2 {
 		x=sx;
 		y=sy;
 	}
+	public Vector2(){
+	}
 
 	public double Magnitude(){
 		return Math.sqrt((x*x+y*y));
