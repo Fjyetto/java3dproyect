@@ -10,12 +10,23 @@ public class Real{
         name = setname;
     }
 
-    public ArrayList<Real> GetChildren(){
+    /*public ArrayList<T> GetChildren(){
         return children;
-    }
+    }*/
 
     public <T extends Real> T Append(T child){
         children.add(child);
         return child;
+    }
+
+    public <T extends Real> T getChildAs(int index, Class<T> expectedType) {
+        Real child = children.get(index);  // Retrieve the child at the index
+
+        // Check if the child is of the expected type
+        if (expectedType.isInstance(child)) {
+            return expectedType.cast(child);  // Safe cast to the expected type
+        } else {
+            throw new IllegalArgumentException("Child at index " + index + " is not of type " + expectedType.getSimpleName());
+        }
     }
 }

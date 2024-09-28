@@ -15,12 +15,13 @@ import java.io.FileNotFoundException;
 public class thing extends JFrame {
     public MPanel uh = null;
     public shit mythread = null;
-    public Real genesis = new Real("Root");
+    public BaseReal genesis = new BaseReal("Root");
     
     public thing() throws InterruptedException{
         System.out.print("SHUDGQDIUSQ\n");
         //setLayout(new FlowLayout());
-        Camera camera = genesis.Append(new Camera());
+        Camera camera = new Camera();
+        genesis.Append(camera);
 
         Mesh cube = null;
         try{
@@ -117,7 +118,7 @@ public class thing extends JFrame {
             g.drawRect(squareX,squareY,squareW,squareH);
 
             //System.out.println(it.x*40.0);
-            genesis.children.get(1);
+            RealMesh cube = genesis.getChildAs(1,RealMesh.class);
 
             g.setColor(Color.BLUE);
         }
