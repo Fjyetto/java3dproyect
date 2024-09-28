@@ -29,7 +29,8 @@ public class thing extends JFrame {
             System.err.println(e);
         }
 
-        genesis.Append(cube); // JohnCube the second child of genesis
+        RealMesh realcube = new RealMesh(cube);
+        genesis.Append(realcube); // JohnCube the second child of genesis
 
         setTitle("Test");
         setSize(512,512);
