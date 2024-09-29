@@ -10,7 +10,7 @@ public class Camera extends Real{
         Vector3 p1 = transform.MultiplyWV(point);
         p1 = p1.Multiply(scale);
         double zm = 1.0/(1.0+p1.z*zscale);
-        p1 = p1.Multiply(new Vector3(zm,zm,1.0));
+        p1 = p1.Multiply(new Vector3(zm*scale,zm*scale,1.0));
         return p1;
     }
 }

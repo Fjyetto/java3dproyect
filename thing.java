@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseMotionAdapter;
 import java.io.FileNotFoundException;
@@ -43,6 +45,7 @@ public class thing extends JFrame {
         mythread=thread;
 
         uh = new MPanel(thread);
+        addKeyListener(uh);
         add(uh);
         pack();
 
@@ -71,7 +74,7 @@ public class thing extends JFrame {
         }
     }
 
-    class MPanel extends JPanel {
+    class MPanel extends JPanel implements KeyListener{
 
         private int squareX = 40;
         private int squareY = 40;
@@ -103,6 +106,35 @@ public class thing extends JFrame {
             } 
         }
 
+        public void keyPressed(KeyEvent e){
+            int key = e.getKeyCode();
+            Camera cam = genesis.getChildAs(0,Camera.class);
+            Transform move = new Transform();
+            double speed = 0.2;
+            System.out.println("Woah");
+            System.out.println(key);
+            switch(key){
+                case KeyEvent.VK_RIGHT:
+                    move.FromVector3((new Vector3(1.0,0.0,0.0)).Multiply(speed));
+                    System.out.println("before");
+                    cam.transform.Print();
+                    cam.setTransform(cam.transform.Multiply(move));
+                    System.out.println("after");
+                    cam.transform.Print();
+                    break;
+                case KeyEvent.VK_LEFT:
+                    move.FromVector3((new Vector3(-1.0,0.0,0.0)).Multiply(speed));
+                    cam.setTransform(cam.transform.Multiply(move));
+                    break;
+            }
+        }
+        public void keyReleased(KeyEvent e){
+
+        }
+        public void keyTyped(KeyEvent e){
+
+        }
+
         public Dimension getPreferredSize(){
             return new Dimension(512,512);
         }
@@ -118,7 +150,22 @@ public class thing extends JFrame {
             g.drawRect(squareX,squareY,squareW,squareH);
 
             //System.out.println(it.x*40.0);
+            Camera cam = genesis.getChildAs(0,Camera.class);
+            cam.scale = 128.0;
             RealMesh cube = genesis.getChildAs(1,RealMesh.class);
+            //System.out.println("Projecting cube !");
+            cam.transform.FromVector3(new Vector3(0.0,0.0,4.0));
+            //cam.transform.Print();
+            for (int i=0;i<cube.mesh.vertices.size(); i++){
+                Vertex cver = cube.mesh.vertices.get(i);
+                Vector3 projected = cam.Project(cver.p);//cube.transform.MultiplyWV(cver.p));
+                //System.out.print(i+" :");
+                //projected.Print();
+                if (projected.z>0.0){
+                    g.setColor(Color.BLUE);
+                    g.fillRect((int)(projected.x+256.0-5.0),(int)(projected.y+256.0-5.0),5,5);
+                }
+            }
 
             g.setColor(Color.BLUE);
         }

@@ -12,6 +12,10 @@ public class Vector3 {
 	public Vector3(){
 	}
 
+	public void Print(){
+		System.out.println(x+", "+y+", "+z);
+	}
+
 	public double Magnitude(){
 		return Math.sqrt((x*x+y*y+z*z));
 	}

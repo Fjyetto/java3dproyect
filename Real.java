@@ -10,12 +10,13 @@ public class Real{
         name = setname;
     }
 
-    /*public ArrayList<T> GetChildren(){
-        return children;
-    }*/
+    public void setTransform(Transform newv){
+        transform = newv;
+    }
 
     public <T extends Real> T Append(T child){
         children.add(child);
+        child.parent = this;
         return child;
     }
 
