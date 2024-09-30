@@ -78,15 +78,15 @@ public class thing extends JFrame {
 
     class MPanel extends JPanel implements KeyListener{
 
-        private int squareX = 40;
+        /*private int squareX = 40;
         private int squareY = 40;
         private int squareW = 50;
-        private int squareH = 50;
+        private int squareH = 50;*/
 
         public MPanel(shit thready){
             setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-            addMouseListener(new MouseAdapter() {
+            /*addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
                     moveSquare(e.getX(),e.getY());
                 }
@@ -96,17 +96,17 @@ public class thing extends JFrame {
                 public void mouseDragged(MouseEvent e) {
                     moveSquare(e.getX(),e.getY());
                 }
-            });
+            });*/
         }
 
-        private void moveSquare(int x, int y) {
+        /*private void moveSquare(int x, int y) {
             int OFFSET = 1;
             if ((squareX!=x) || (squareY!=y)) {
                 repaint(squareX,squareY,squareW+OFFSET,squareH+OFFSET);
                 squareX=x;
                 squareY=y;
             } 
-        }
+        }*/
 
         public void keyPressed(KeyEvent e){
             int key = e.getKeyCode();
@@ -116,22 +116,32 @@ public class thing extends JFrame {
             //System.out.println(key);
             switch(key){
                 case KeyEvent.VK_RIGHT:
-                    move.FromVector3((new Vector3(1.0,0.0,0.0)).Multiply(speed));
+                    move.FromVector3(new Vector3(-1.0,0.0,0.0));
+                    move = camera.transform.GetRot().Multiply(move).GetTra();
+                    //move = move.Multiply(camera.transform.GetRot()).GetTra();
                     camera.setTransform(camera.transform.Multiply(move));
                     break;
                 case KeyEvent.VK_LEFT:
-                    move.FromVector3((new Vector3(-1.0,0.0,0.0)).Multiply(speed));
+                    move.FromVector3(new Vector3(1.0,0.0,0.0));
+                    move = camera.transform.GetRot().Multiply(move).GetTra();
+                    //move = move.Multiply(camera.transform.GetRot()).GetTra();
                     camera.setTransform(camera.transform.Multiply(move));
                     break;
                 case KeyEvent.VK_NUMPAD6:
-                    move.FromAxisRotation('y', 3.14159/10.0);
-                    camera.setTransform(camera.transform.Inverse().Multiply(move).Inverse());
+                    
+                    //move.FromAxisRotation('y', 3.14159/20.0);
+                    //camera.setTransform(camera.transform.GetTra().Multiply(camera.transform.GetRot().Multiply(move)));
+                    //camera.setTransform(camera.transform.Multiply(move));
                     break;
                 case KeyEvent.VK_NUMPAD4:
-                    move.FromAxisRotation('y', -3.14159/100.0);
-                    //camera.setTransform(camera.transform.Add(move));
+
+                    //move.FromAxisRotation('y', -3.14159/20.0);
+                    //camera.setTransform(camera.transform.GetTra().Multiply(camera.transform.GetRot().Multiply(move)));
+                    //camera.setTransform(camera.transform.Multiply(move));
                     break;
             }
+            System.out.println("NewcamT:");
+            camera.transform.Print();
         }
         public void keyReleased(KeyEvent e){
 
@@ -149,10 +159,10 @@ public class thing extends JFrame {
 
             g.drawString("holy moly",10,30);
 
-            g.setColor(Color.RED);
+            /*g.setColor(Color.RED);
             g.fillRect(squareX,squareY,squareW,squareH);
             g.setColor(Color.BLACK);
-            g.drawRect(squareX,squareY,squareW,squareH);
+            g.drawRect(squareX,squareY,squareW,squareH);*/
 
             //System.out.println(it.x*40.0);
             Camera cam = genesis.getChildAs(0,Camera.class);

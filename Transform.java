@@ -72,7 +72,30 @@ public class Transform {
 			nm[10]=1.0;
 			break;
 		}
+		matrix = nm;
 		return nt;
+	}
+
+	public Transform GetRot(){
+		Transform rotres = new Transform();
+
+		rotres.matrix[0]=matrix[0];
+		rotres.matrix[1]=matrix[1];
+		rotres.matrix[2]=matrix[2];
+		rotres.matrix[4]=matrix[4];
+		rotres.matrix[5]=matrix[5];
+		rotres.matrix[6]=matrix[6];
+		rotres.matrix[10]=matrix[10];
+
+		return rotres;
+	}
+	public Transform GetTra(){
+		Transform trares = new Transform();
+		trares.matrix[3] = matrix[3 ];
+		trares.matrix[7] = matrix[7 ];
+		trares.matrix[11]= matrix[11];
+
+		return trares;
 	}
 
 	public Transform Inverse(){
