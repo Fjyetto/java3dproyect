@@ -8,8 +8,12 @@ public class Transform {
 
 	public Transform(){
 		/*
+		              [0  1  2  3 ]
+		              [4  5  6  7 ]
+		              [8  9  10 11]
+		              [12 13 14 15]
 		 [0  1  2  3 ]
-		 [4  5  6  7 ]
+		 [4  5  6  7 ] multiplciation bojfbiovhnxclkjvnxhbjkvhbsdjkfv
 		 [8  9  10 11]
 		 [12 13 14 15]
 		*/
@@ -71,6 +75,26 @@ public class Transform {
 		return nt;
 	}
 
+	public Transform Inverse(){
+		Transform rotres = new Transform();
+
+		rotres.matrix[0]=matrix[0];
+		rotres.matrix[1]=matrix[4];
+		rotres.matrix[2]=matrix[8];
+		rotres.matrix[4]=matrix[1];
+		rotres.matrix[5]=matrix[5];
+		rotres.matrix[6]=matrix[9];
+		rotres.matrix[10]=matrix[10];
+
+		//result.matrix[3]=matrix[8];
+		Transform trares = new Transform();
+		trares.matrix[3] = -matrix[3 ];
+		trares.matrix[7] = -matrix[7 ];
+		trares.matrix[11]= -matrix[11];
+
+		return rotres.Multiply(trares);
+	}
+
 	public Transform Multiply(Transform t1){
 		Transform result = new Transform();
 
@@ -93,6 +117,32 @@ public class Transform {
 		result.matrix[13]= t1.matrix[ 1]*matrix[12] + t1.matrix[ 5]*matrix[13] + t1.matrix[ 9]*matrix[14] + t1.matrix[13]*matrix[15];
 		result.matrix[14]= t1.matrix[ 2]*matrix[12] + t1.matrix[ 6]*matrix[13] + t1.matrix[10]*matrix[14] + t1.matrix[14]*matrix[15];
 		result.matrix[15]= t1.matrix[ 3]*matrix[12] + t1.matrix[ 7]*matrix[13] + t1.matrix[11]*matrix[14] + t1.matrix[15]*matrix[15];
+
+		return result;
+	}
+
+	public Transform Add(Transform t1){
+		Transform result = new Transform();
+
+		result.matrix[0] = t1.matrix[ 0]+matrix[ 0];
+		result.matrix[1] = t1.matrix[ 1]*matrix[ 1];
+		result.matrix[2] = t1.matrix[ 2]*matrix[ 2];
+		result.matrix[3] = t1.matrix[ 3]*matrix[ 3];
+
+		result.matrix[4] = t1.matrix[ 4]*matrix[ 4];
+		result.matrix[5] = t1.matrix[ 5]*matrix[ 5];
+		result.matrix[6] = t1.matrix[ 6]*matrix[ 6];
+		result.matrix[7] = t1.matrix[ 7]*matrix[ 7];
+
+		result.matrix[8] = t1.matrix[ 8]*matrix[ 8];
+		result.matrix[9] = t1.matrix[ 9]*matrix[ 9];
+		result.matrix[10]= t1.matrix[10]*matrix[10];
+		result.matrix[11]= t1.matrix[11]*matrix[11];
+
+		result.matrix[12]= t1.matrix[12]*matrix[12];
+		result.matrix[13]= t1.matrix[13]*matrix[13];
+		result.matrix[14]= t1.matrix[14]*matrix[14];
+		result.matrix[15]= t1.matrix[15]*matrix[15];
 
 		return result;
 	}

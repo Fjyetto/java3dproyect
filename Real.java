@@ -11,7 +11,7 @@ public class Real{
     }
 
     public void setTransform(Transform newv){
-        transform = newv;
+        this.transform = newv;
     }
 
     public <T extends Real> T Append(T child){

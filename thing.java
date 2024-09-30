@@ -18,11 +18,13 @@ public class thing extends JFrame {
     public MPanel uh = null;
     public shit mythread = null;
     public BaseReal genesis = new BaseReal("Root");
+    public Camera camera = null;
     
     public thing() throws InterruptedException{
         System.out.print("SHUDGQDIUSQ\n");
         //setLayout(new FlowLayout());
-        Camera camera = new Camera();
+        camera = new Camera();
+        camera.transform.FromVector3(new Vector3(0.0,0.0,4.0));
         genesis.Append(camera);
 
         Mesh cube = null;
@@ -108,23 +110,26 @@ public class thing extends JFrame {
 
         public void keyPressed(KeyEvent e){
             int key = e.getKeyCode();
-            Camera cam = genesis.getChildAs(0,Camera.class);
             Transform move = new Transform();
             double speed = 0.2;
-            System.out.println("Woah");
-            System.out.println(key);
+            //System.out.println("Woah");
+            //System.out.println(key);
             switch(key){
                 case KeyEvent.VK_RIGHT:
                     move.FromVector3((new Vector3(1.0,0.0,0.0)).Multiply(speed));
-                    System.out.println("before");
-                    cam.transform.Print();
-                    cam.setTransform(cam.transform.Multiply(move));
-                    System.out.println("after");
-                    cam.transform.Print();
+                    camera.setTransform(camera.transform.Multiply(move));
                     break;
                 case KeyEvent.VK_LEFT:
                     move.FromVector3((new Vector3(-1.0,0.0,0.0)).Multiply(speed));
-                    cam.setTransform(cam.transform.Multiply(move));
+                    camera.setTransform(camera.transform.Multiply(move));
+                    break;
+                case KeyEvent.VK_NUMPAD6:
+                    move.FromAxisRotation('y', 3.14159/10.0);
+                    camera.setTransform(camera.transform.Inverse().Multiply(move).Inverse());
+                    break;
+                case KeyEvent.VK_NUMPAD4:
+                    move.FromAxisRotation('y', -3.14159/100.0);
+                    //camera.setTransform(camera.transform.Add(move));
                     break;
             }
         }
@@ -154,7 +159,7 @@ public class thing extends JFrame {
             cam.scale = 128.0;
             RealMesh cube = genesis.getChildAs(1,RealMesh.class);
             //System.out.println("Projecting cube !");
-            cam.transform.FromVector3(new Vector3(0.0,0.0,4.0));
+            //cam.transform.FromVector3(new Vector3(0.0,0.0,4.0));
             //cam.transform.Print();
             for (int i=0;i<cube.mesh.vertices.size(); i++){
                 Vertex cver = cube.mesh.vertices.get(i);
