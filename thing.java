@@ -171,6 +171,7 @@ public class thing extends JFrame {
             //System.out.println("Projecting cube !");
             //cam.transform.FromVector3(new Vector3(0.0,0.0,4.0));
             //cam.transform.Print();
+            /*int last[]={0,0}; 
             for (int i=0;i<cube.mesh.vertices.size(); i++){
                 Vertex cver = cube.mesh.vertices.get(i);
                 Vector3 projected = cam.Project(cver.p);//cube.transform.MultiplyWV(cver.p));
@@ -179,6 +180,27 @@ public class thing extends JFrame {
                 if (projected.z>0.0){
                     g.setColor(Color.BLUE);
                     g.fillRect((int)(projected.x+256.0-5.0),(int)(projected.y+256.0-5.0),5,5);
+
+                    g.drawLine((int)(projected.x+256.0),(int)(projected.y+256.0), last[0], last[1]);
+
+                    last[0]=(int)(projected.x+256.0);
+                    last[1]=(int)(projected.y+256.0);
+                }
+            }*/
+
+            for (int i=0;i<cube.mesh.faces.size(); i++){
+                Face cface = cube.mesh.faces.get(i);
+                for (int vi=0;vi<3; vi++){
+                    Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]-1);
+                    Vector3 projected = cam.Project(cver.p);//cube.transform.MultiplyWV(cver.p));
+                    //System.out.print(i+" :");
+                    //projected.Print();
+                    if (projected.z>0.0){
+                        g.setColor(Color.BLUE);
+                        g.fillRect((int)(projected.x+256.0-5.0),(int)(projected.y+256.0-5.0),5,5);
+
+                        //g.drawLine((int)(projected.x+256.0),(int)(projected.y+256.0), last[0], last[1]);
+                    }
                 }
             }
 
