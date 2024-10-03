@@ -68,12 +68,14 @@ public class thing extends JFrame {
 
             //Transform rot = (new Transform()).FromAxisRotation('z',.011);//.Multiply((new Transform()).FromAxisRotation('x',0.0031415));
 
+            RealMesh rm = genesis.getChildAs(1, RealMesh.class);
+
             while (true){
                 long now = System.nanoTime();
                 delta += (now-lastTime)/ns;
                 lastTime = now;
                 while (delta>=1){
-                    
+                    //rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.03)));
                     //System.out.println(thingy.x);
                     uh.repaint(0,0,size.x,size.y);
                     delta--;
@@ -120,6 +122,18 @@ public class thing extends JFrame {
                     break;
                 case KeyEvent.VK_LEFT:
                     move.FromVector3(new Vector3(speed,0.0,0.0));
+                    move = camera.transform.GetRot().Multiply(move).GetTra();
+                    //move = move.Multiply(camera.transform.GetRot()).GetTra();
+                    camera.setTransform(camera.transform.Multiply(move));
+                    break;
+                case KeyEvent.VK_UP:
+                    move.FromVector3(new Vector3(0.0,0.0,-speed));
+                    move = camera.transform.GetRot().Multiply(move).GetTra();
+                    //move = move.Multiply(camera.transform.GetRot()).GetTra();
+                    camera.setTransform(camera.transform.Multiply(move));
+                    break;
+                case KeyEvent.VK_DOWN:
+                    move.FromVector3(new Vector3(0.0,0.0,speed));
                     move = camera.transform.GetRot().Multiply(move).GetTra();
                     //move = move.Multiply(camera.transform.GetRot()).GetTra();
                     camera.setTransform(camera.transform.Multiply(move));
@@ -182,20 +196,21 @@ public class thing extends JFrame {
                 int yop = (int) (v1.y-Math.copySign(y, l));
                 
                 g.drawLine(x2,yop,x1,yop);
+                if (yop>=0 && yop<size.y){
                 if (x1>x2){
                     for (int x=0; x<(int)(x1-x2);x++){
-                        int zf = (int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                        int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
                         if (x+x2>=0 && x+x2<size.x){
                             buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
                         }
-                        buh.setRGB(x+x2,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x2,yop)));
+                        //buh.setRGB(x+x2,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x2,yop)));
                         /*if (ZBuff.length>x+x2+yop*size.x){
                             ZBuff[x+yop*size.x]=kk*vv3.z+jj*vv1.z;
                         }*/
                     }
                 }else{
                     for (int x=0; x<(int)(x2-x1);x++){
-                        int zf = (int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                        int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
                         if (x+x1>=0 && x+x1<size.x){
                             buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
                         }
@@ -203,7 +218,7 @@ public class thing extends JFrame {
                             ZBuff[x+yop*size.x]=kk*vv3.z+jj*vv1.z;
                         }*/
                     }
-                }
+                }}
                 
             }
         }
@@ -239,7 +254,7 @@ public class thing extends JFrame {
                     fillTopTriangle(g, v3, vm, v1);
                     g.setColor(Color.RED);
                     fillTopTriangle(g, v3, vm, v2);
-                }else{ // v3 between v2 and v1
+                }else{ // v1 between v3 and v2
                     double hfl = (v1.y-v3.y)/(v2.y-v3.y);
                     Vector3 vm = new Vector3(
                         ((v2.x-v3.x)*hfl)+v3.x,
@@ -309,7 +324,7 @@ public class thing extends JFrame {
                 g.setColor(new Color((float)ZBuff[zbi],(float)ZBuff[zbi],(float)ZBuff[zbi]));
                 g.drawImage()
             }*/
-            g.drawImage(buh,0,0,null);
+            //g.drawImage(buh,0,0,null);
         }
     }
     
