@@ -16,6 +16,10 @@ public class Vector3 {
 		System.out.println(x+", "+y+", "+z);
 	}
 
+	public IntVector2 ToIV2(){
+		return new IntVector2((int)x,(int)y);
+	}
+
 	public double Magnitude(){
 		return Math.sqrt((x*x+y*y+z*z));
 	}

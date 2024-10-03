@@ -1,13 +1,17 @@
 public class IntVector2 {
 
-	public int x=0.0;
-	public int y=0.0;
+	public int x=0;
+	public int y=0;
 
 	public IntVector2(int sx, int sy){
 		x=sx;
 		y=sy;
 	}
 	public IntVector2(){
+	}
+
+	public void Print(){
+		System.out.println(x+", "+y);
 	}
 
 	public int Magnitude(){
@@ -26,7 +30,7 @@ public class IntVector2 {
 		return res;
 	}
 
-	public IntVector2 Multiply(double s){
+	public IntVector2 Multiply(int s){
 		IntVector2 res = new IntVector2(x*s,y*s);
 		return res;
 	}
