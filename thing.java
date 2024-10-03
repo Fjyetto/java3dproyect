@@ -33,12 +33,14 @@ public class thing extends JFrame {
 
         Mesh cube = null;
         try{
-            cube = Mesh.FromOBJ("JohnCube.obj");
+            //cube = Mesh.FromOBJ("JohnCube.obj");
+            cube = Mesh.FromOBJ("SimpleTri.obj");
         } catch (FileNotFoundException e){
             System.err.println(e);
         }
 
         RealMesh realcube = new RealMesh(cube);
+        realcube.transform.FromAxisRotation('y', Math.PI/2.0);
         genesis.Append(realcube); // JohnCube the second child of genesis
 
         setTitle("Test");
@@ -182,7 +184,10 @@ public class thing extends JFrame {
                 g.drawLine(x2,yop,x1,yop);
                 if (x1>x2){
                     for (int x=0; x<(int)(x1-x2);x++){
-                        int zf = (int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.5);
+                        int zf = (int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                        if (x+x2>=0 && x+x2<size.x){
+                            buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                        }
                         buh.setRGB(x+x2,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x2,yop)));
                         /*if (ZBuff.length>x+x2+yop*size.x){
                             ZBuff[x+yop*size.x]=kk*vv3.z+jj*vv1.z;
@@ -190,8 +195,10 @@ public class thing extends JFrame {
                     }
                 }else{
                     for (int x=0; x<(int)(x2-x1);x++){
-                        int zf = (int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.5);
-                        buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                        int zf = (int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                        if (x+x1>=0 && x+x1<size.x){
+                            buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                        }
                         /*if (ZBuff.length>x+x1+yop*size.x){
                             ZBuff[x+yop*size.x]=kk*vv3.z+jj*vv1.z;
                         }*/
@@ -217,7 +224,7 @@ public class thing extends JFrame {
                     Vector3 vm = new Vector3(
                         ((v1.x-v3.x)*hfl)+v3.x,
                         v2.y,
-                        ((v1.z-v3.z)*hfl)+v3.x
+                        ((v1.z-v3.z)*hfl)+v3.z
                         );
                     fillTopTriangle(g, v2, vm, v3);
                     g.setColor(Color.RED);
@@ -255,9 +262,15 @@ public class thing extends JFrame {
             cam.scale = 128.0;
             RealMesh cube = genesis.getChildAs(1,RealMesh.class);
             
-            Graphics bg = buh.createGraphics();
+            /*Graphics bg = buh.createGraphics();
             bg.setColor(Color.BLACK);
             bg.drawRect(0, 0, size.x, size.y);
+            */
+            for (int x=0;x<size.x;x++){
+                for (int y=0;y<size.y;y++){
+                    buh.setRGB(x, y, 0);
+                }
+            }
 
             for (int i=0;i<cube.mesh.faces.size(); i++){
                 Face cface = cube.mesh.faces.get(i);
@@ -268,7 +281,7 @@ public class thing extends JFrame {
 
                 for (int vi=0;vi<3; vi++){
                     Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]-1);
-                    Vector3 projected = cam.Project(cver.p);//cube.transform.MultiplyWV(cver.p));
+                    Vector3 projected = cam.Project(cube.transform.MultiplyWV(cver.p));//cube.transform.MultiplyWV(cver.p));
 
                     //projects[vi]=new IntVector2((int)(projected.x)+(int)(size.x*0.5),(int)(projected.y)+(int)(size.y*0.5));
                     projects[vi]=new Vector3(projected.x+size.x*0.5,projected.y+size.y*0.5,projected.z);
