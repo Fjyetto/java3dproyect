@@ -5,7 +5,6 @@ import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseAdapter;
@@ -37,7 +36,8 @@ public class thing extends JFrame {
         Mesh cube = null;
         try{
             //cube = Mesh.FromOBJ("JohnCube.obj");
-            cube = Mesh.FromOBJ("SimpleTri.obj");
+            cube = Mesh.FromOBJ("FourTris.obj");
+            //cube = Mesh.FromOBJ("SimpleTri.obj");
         } catch (FileNotFoundException e){
             System.err.println(e);
         }
@@ -88,11 +88,6 @@ public class thing extends JFrame {
     }
 
     class MPanel extends JPanel implements KeyListener{
-
-        /*private int squareX = 40;
-        private int squareY = 40;
-        private int squareW = 50;
-        private int squareH = 50;*/
 
         public MPanel(shit thready){
             setBorder(BorderFactory.createLineBorder(Color.BLACK));

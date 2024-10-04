@@ -62,7 +62,12 @@ public class Renderer{
                 }
             }
 
+            //splitTriangle(g, projects[0], projects[1], projects[2]);
+
             g.setColor(Color.BLUE);
+            g.drawString("v "+cface.vertices[0],IVprojects[0].x,IVprojects[0].y);
+            g.drawString("v "+cface.vertices[1],IVprojects[1].x,IVprojects[1].y);
+            g.drawString("v "+cface.vertices[2],IVprojects[2].x,IVprojects[2].y);
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[2].x, IVprojects[2].y);
             g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);
@@ -95,21 +100,38 @@ public class Renderer{
                     if (x1>x2){
                         for (int x=0; x<(int)(x1-x2);x++){
                             int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
-                            if (x+x2>=0 && x+x2<size.x){
-                                buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                            int xf = x+x2;
+                            if (xf>=0 && xf<size.x){
+                                buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }
                     }else{
                         for (int x=0; x<(int)(x2-x1);x++){
                             int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
-                            if (x+x1>=0 && x+x1<size.x){
-                                buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                            int xf = x+x1;
+                            if (xf>=0 && xf<size.x){
+                                buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }
                     }
                 }
             }else{
                 g.drawLine(x2,yop,x1,yop);
+                /*if (x1>x2){
+                    for (int x=0; x<(int)(x1-x2);x++){
+                        int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                        if (buh.getRGB(x+x1,yop)==zf+zf*256+zf*256*256){
+                            g.drawLine(x+x1, yop, x+x1, yop);
+                        }
+                    }
+                }else{
+                    for (int x=0; x<(int)(x2-x1);x++){
+                        int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                        if (x+x1>=0 && x+x1<size.x){
+                            buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                        }
+                    }
+                }*/
             }
         }
     }
@@ -126,6 +148,7 @@ public class Renderer{
         }else{
             g.setColor(Color.CYAN);
             if ((v2.y<v1.y && v2.y>v3.y) || (v2.y>v1.y && v2.y<v3.y)){ // v2 between v1 and v3
+                // og is v3
                 double hfl = (v2.y-v3.y)/(v1.y-v3.y);
                 Vector3 vm = new Vector3(
                     ((v1.x-v3.x)*hfl)+v3.x,
@@ -135,7 +158,8 @@ public class Renderer{
                 fillTopTriangle(g, v2, vm, v3);
                 g.setColor(Color.RED);
                 fillTopTriangle(g, v2, vm, v1);
-            }else if ((v3.y<v1.y && v3.y>v2.y) || (v3.y>v1.y && v3.y<v2.y)){ // v3 between v2 and v3
+            }else if ((v3.y<v1.y && v3.y>v2.y) || (v3.y>v1.y && v3.y<v2.y)){ // v3 between v1 and v2
+                // og is v2
                 double hfl = (v3.y-v2.y)/(v1.y-v2.y);
                 Vector3 vm = new Vector3(
                     ((v1.x-v2.x)*hfl)+v2.x,
@@ -146,6 +170,7 @@ public class Renderer{
                 g.setColor(Color.RED);
                 fillTopTriangle(g, v3, vm, v2);
             }else{ // v1 between v3 and v2
+                // og is v3
                 double hfl = (v1.y-v3.y)/(v2.y-v3.y);
                 Vector3 vm = new Vector3(
                     ((v2.x-v3.x)*hfl)+v3.x,
