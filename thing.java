@@ -22,14 +22,17 @@ public class thing extends JFrame {
     public Camera camera = null;
     public IntVector2 size = new IntVector2(1024,512);
     //public double ZBuff[] = new double[size.x*size.y];
-    public BufferedImage buh = new BufferedImage(size.x,size.y,BufferedImage.TYPE_BYTE_GRAY);
-    
+    //public BufferedImage buh = new BufferedImage(size.x,size.y,BufferedImage.TYPE_BYTE_GRAY);
+    public Renderer renderer = null;
+
     public thing() throws InterruptedException{
         System.out.print("SHUDGQDIUSQ\n");
         //setLayout(new FlowLayout());
         camera = new Camera();
         camera.transform.FromVector3(new Vector3(0.0,0.0,4.0));
+        camera.scale = 128.0;
         genesis.Append(camera);
+        renderer = new Renderer(size.x,size.y,genesis,camera);
 
         Mesh cube = null;
         try{
@@ -165,7 +168,7 @@ public class thing extends JFrame {
             return new Dimension(size.x,size.y);
         }
 
-        public void fillTopTriangle(Graphics g, Vector3 vv1, Vector3 vv2, Vector3 vv3){
+        /*public void fillTopTriangle(Graphics g, Vector3 vv1, Vector3 vv2, Vector3 vv3){
 
             IntVector2 v1 = new IntVector2((int)vv1.x,(int)vv1.y);
             IntVector2 v2 = new IntVector2((int)vv2.x,(int)vv2.y);
@@ -176,10 +179,6 @@ public class thing extends JFrame {
                 return;
             }
 
-            /*System.out.print("filling top tri: ");
-            v1.Print();
-            v2.Print();
-            v3.Print();*/
             for (int y=0; y<Math.abs(l)+1;y++){
                 double kk = (double)y/Math.abs(l);
                 double jj=1-kk;
@@ -188,11 +187,6 @@ public class thing extends JFrame {
                 int x2 = (int) ( kk*(double)v3.x + jj*(double)v2.x );
                 //System.out.println(x2);
 
-                /*if (l<=0){
-                    double t = kk;
-                    kk = jj;
-                    jj = t;
-                }*/
                 int yop = (int) (v1.y-Math.copySign(y, l));
                 
                 g.drawLine(x2,yop,x1,yop);
@@ -203,10 +197,6 @@ public class thing extends JFrame {
                         if (x+x2>=0 && x+x2<size.x){
                             buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
                         }
-                        //buh.setRGB(x+x2,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x2,yop)));
-                        /*if (ZBuff.length>x+x2+yop*size.x){
-                            ZBuff[x+yop*size.x]=kk*vv3.z+jj*vv1.z;
-                        }*/
                     }
                 }else{
                     for (int x=0; x<(int)(x2-x1);x++){
@@ -214,16 +204,13 @@ public class thing extends JFrame {
                         if (x+x1>=0 && x+x1<size.x){
                             buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
                         }
-                        /*if (ZBuff.length>x+x1+yop*size.x){
-                            ZBuff[x+yop*size.x]=kk*vv3.z+jj*vv1.z;
-                        }*/
                     }
                 }}
                 
             }
-        }
+        }*/
 
-        public void splitTriangle(Graphics g, Vector3 v1, Vector3 v2, Vector3 v3){
+        /*public void splitTriangle(Graphics g, Vector3 v1, Vector3 v2, Vector3 v3){
 
             g.setColor(Color.GREEN);
             if (v1.y==v2.y){
@@ -266,26 +253,23 @@ public class thing extends JFrame {
                     fillTopTriangle(g, v1, vm, v3);
                 }
             }
-        }
+        }*/
 
         public void paintComponent(Graphics g){
             super.paintComponent(g);
 
             g.drawString("holy moly",10,30);
 
-            Camera cam = genesis.getChildAs(0,Camera.class);
-            cam.scale = 128.0;
-            RealMesh cube = genesis.getChildAs(1,RealMesh.class);
+            renderer.draw(g);
+            /*RealMesh cube = genesis.getChildAs(1,RealMesh.class);
             
-            /*Graphics bg = buh.createGraphics();
-            bg.setColor(Color.BLACK);
-            bg.drawRect(0, 0, size.x, size.y);
-            */
             for (int x=0;x<size.x;x++){
                 for (int y=0;y<size.y;y++){
                     buh.setRGB(x, y, 0);
                 }
             }
+
+            g.drawImage(buh,0,0,null);
 
             for (int i=0;i<cube.mesh.faces.size(); i++){
                 Face cface = cube.mesh.faces.get(i);
@@ -313,18 +297,9 @@ public class thing extends JFrame {
                 g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
                 g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[2].x, IVprojects[2].y);
                 g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);
-            }
+            }*/
 
             g.setColor(Color.BLUE);
-
-            /*for (int zbi = 0; zbi<ZBuff.length; zbi++){
-                int x = zbi%size.x;
-                int y = zbi/size.y;
-
-                g.setColor(new Color((float)ZBuff[zbi],(float)ZBuff[zbi],(float)ZBuff[zbi]));
-                g.drawImage()
-            }*/
-            //g.drawImage(buh,0,0,null);
         }
     }
     
