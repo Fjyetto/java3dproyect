@@ -151,11 +151,17 @@ public class Renderer{
             g.setColor(Color.CYAN);
             if ((v2.y<v1.y && v2.y>v3.y) || (v2.y>v1.y && v2.y<v3.y)){ // v2 between v1 and v3
                 // og is v3
+                
                 double hfl = (v2.y-v3.y)/(v1.y-v3.y);
-                Vector3 vm = new Vector3(
+                /*Vector3 vm = new Vector3(
                     ((v1.x-v3.x)*hfl)+v3.x,
                     v2.y,
                     (((v1.z-v3.z)*hfl)+v3.z)
+                    );*/
+                Vector3 vm = new Vector3(
+                    ((v1.x-v3.x)*hfl)+v3.x,
+                    v2.y,
+                    1/(hfl*(1/v1.z)+(1-hfl)*(1/v3.z))
                     );
                 fillTopTriangle(g, v2, vm, v3);
                 g.setColor(Color.RED);
@@ -163,17 +169,27 @@ public class Renderer{
             }else if ((v3.y<v1.y && v3.y>v2.y) || (v3.y>v1.y && v3.y<v2.y)){ // v3 between v1 and v2
                 // og is v2
                 double hfl = (v3.y-v2.y)/(v1.y-v2.y);
+                /*Vector3 vm = new Vector3(
+                    ((v1.x-v2.x)*hfl)+v2.x,
+                    v3.y,
+                    (((v1.z-v2.z)*hfl)+v2.z)
+                    );*/
                 Vector3 vm = new Vector3(
                     ((v1.x-v2.x)*hfl)+v2.x,
                     v3.y,
                     (((v1.z-v2.z)*hfl)+v2.z)
-                    );
+                    )
                 fillTopTriangle(g, v3, vm, v1);
                 g.setColor(Color.RED);
                 fillTopTriangle(g, v3, vm, v2);
             }else{ // v1 between v3 and v2
                 // og is v3
                 double hfl = (v1.y-v3.y)/(v2.y-v3.y);
+                /*Vector3 vm = new Vector3(
+                    ((v2.x-v3.x)*hfl)+v3.x,
+                    v1.y,
+                    (((v2.z-v3.z)*hfl)+v3.z)
+                    );*/
                 Vector3 vm = new Vector3(
                     ((v2.x-v3.x)*hfl)+v3.x,
                     v1.y,
