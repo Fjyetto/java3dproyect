@@ -40,7 +40,7 @@ public class Renderer{
             splitTriangle(g, projects[0], projects[1], projects[2]);
         }
 
-        g.drawImage(buh,0,0,null);
+        //g.drawImage(buh,0,0,null);
         ZBMode = false;
         for (int i=0;i<cube.mesh.faces.size(); i++){
             Face cface = cube.mesh.faces.get(i);
@@ -65,9 +65,9 @@ public class Renderer{
             //splitTriangle(g, projects[0], projects[1], projects[2]);
 
             g.setColor(Color.BLUE);
-            g.drawString("v "+cface.vertices[0],IVprojects[0].x,IVprojects[0].y);
-            g.drawString("v "+cface.vertices[1],IVprojects[1].x,IVprojects[1].y);
-            g.drawString("v "+cface.vertices[2],IVprojects[2].x,IVprojects[2].y);
+            g.drawString("v "+cface.vertices[0]+" "+projects[0].z,IVprojects[0].x,IVprojects[0].y);
+            g.drawString("v "+cface.vertices[1]+" "+projects[1].z,IVprojects[1].x,IVprojects[1].y);
+            g.drawString("v "+cface.vertices[2]+" "+projects[2].z,IVprojects[2].x,IVprojects[2].y);
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[2].x, IVprojects[2].y);
             g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);
@@ -105,6 +105,7 @@ public class Renderer{
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }
+                        g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                     }else{
                         for (int x=0; x<(int)(x2-x1);x++){
                             int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
@@ -113,6 +114,7 @@ public class Renderer{
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }
+                        g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                     }
                 }
             }else{
@@ -153,7 +155,7 @@ public class Renderer{
                 Vector3 vm = new Vector3(
                     ((v1.x-v3.x)*hfl)+v3.x,
                     v2.y,
-                    ((v1.z-v3.z)*hfl)+v3.z
+                    (((v1.z-v3.z)*hfl)+v3.z)
                     );
                 fillTopTriangle(g, v2, vm, v3);
                 g.setColor(Color.RED);
@@ -164,7 +166,7 @@ public class Renderer{
                 Vector3 vm = new Vector3(
                     ((v1.x-v2.x)*hfl)+v2.x,
                     v3.y,
-                    ((v1.z-v2.z)*hfl)+v2.z
+                    (((v1.z-v2.z)*hfl)+v2.z)
                     );
                 fillTopTriangle(g, v3, vm, v1);
                 g.setColor(Color.RED);
@@ -175,7 +177,7 @@ public class Renderer{
                 Vector3 vm = new Vector3(
                     ((v2.x-v3.x)*hfl)+v3.x,
                     v1.y,
-                    ((v2.z-v3.z)*hfl)+v3.z
+                    (((v2.z-v3.z)*hfl)+v3.z)
                     );
                 fillTopTriangle(g, v1, vm, v2);
                 g.setColor(Color.RED);
