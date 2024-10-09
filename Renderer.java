@@ -40,7 +40,7 @@ public class Renderer{
             splitTriangle(g, projects[0], projects[1], projects[2]);
         }
 
-        //g.drawImage(buh,0,0,null);
+        g.drawImage(buh,0,0,null);
         ZBMode = false;
         for (int i=0;i<cube.mesh.faces.size(); i++){
             Face cface = cube.mesh.faces.get(i);
@@ -76,6 +76,8 @@ public class Renderer{
 
     public void fillTopTriangle(Graphics g, Vector3 vv1, Vector3 vv2, Vector3 vv3){
 
+        // vv1.y == vv2.y
+
         IntVector2 v1 = new IntVector2((int)vv1.x,(int)vv1.y);
         IntVector2 v2 = new IntVector2((int)vv2.x,(int)vv2.y);
         IntVector2 v3 = new IntVector2((int)vv3.x,(int)vv3.y);
@@ -97,9 +99,17 @@ public class Renderer{
             
             if (ZBMode){
                 if (yop>=0 && yop<size.y){
+                    if (l>0){
+                        //kk = 1-kk;
+                        //jj = 1-jj;
+                        
+                    }
                     if (x1>x2){
                         for (int x=0; x<(int)(x1-x2);x++){
-                            int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                            //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                            double ll = ((double)x) / Math.abs(x1-x2);
+                            double z = (vv3.z)*(jj) + (vv1.z*ll + vv2.z*(1-ll))*kk;
+                            int zf = 255-(int)Math.min(255,(z)*0.8-80);
                             int xf = x+x2;
                             if (xf>=0 && xf<size.x){
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
@@ -108,7 +118,10 @@ public class Renderer{
                         g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                     }else{
                         for (int x=0; x<(int)(x2-x1);x++){
-                            int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                            //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
+                            double ll = ((double)x) / Math.abs(x1-x2);
+                            double z = (vv3.z)*(jj) + (vv2.z*ll + vv1.z*(1-ll))*kk;
+                            int zf = 255-(int)Math.min(255,(z)*0.8-80);
                             int xf = x+x1;
                             if (xf>=0 && xf<size.x){
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
@@ -177,8 +190,8 @@ public class Renderer{
                 Vector3 vm = new Vector3(
                     ((v1.x-v2.x)*hfl)+v2.x,
                     v3.y,
-                    (((v1.z-v2.z)*hfl)+v2.z)
-                    )
+                    1/((hfl*(1/v1.z)+(1-hfl)*(1/v2.z)))
+                    );
                 fillTopTriangle(g, v3, vm, v1);
                 g.setColor(Color.RED);
                 fillTopTriangle(g, v3, vm, v2);
@@ -193,7 +206,7 @@ public class Renderer{
                 Vector3 vm = new Vector3(
                     ((v2.x-v3.x)*hfl)+v3.x,
                     v1.y,
-                    (((v2.z-v3.z)*hfl)+v3.z)
+                    1/((hfl*(1/v2.z)+(1-hfl)*(1/v3.z)))
                     );
                 fillTopTriangle(g, v1, vm, v2);
                 g.setColor(Color.RED);
