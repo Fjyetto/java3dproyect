@@ -68,9 +68,9 @@ public class Renderer{
             g.drawString("v "+cface.vertices[0]+" "+projects[0].z,IVprojects[0].x,IVprojects[0].y);
             g.drawString("v "+cface.vertices[1]+" "+projects[1].z,IVprojects[1].x,IVprojects[1].y);
             g.drawString("v "+cface.vertices[2]+" "+projects[2].z,IVprojects[2].x,IVprojects[2].y);
-            g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
+            /*g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[2].x, IVprojects[2].y);
-            g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);
+            g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);*/
         }
     }
 
@@ -91,25 +91,26 @@ public class Renderer{
             double kk = (double)y/Math.abs(l);
             double jj=1-kk;
 
-            int x1 = (int) ( kk*(double)v3.x + jj*(double)v1.x );
-            int x2 = (int) ( kk*(double)v3.x + jj*(double)v2.x );
+            int x2 = (int) ( kk*vv3.x + jj*vv2.x );
+            int x1 = (int) ( kk*vv3.x + jj*vv1.x );
             //System.out.println(x2);
 
             int yop = (int) (v1.y-Math.copySign(y, l));
             
             if (ZBMode){
                 if (yop>=0 && yop<size.y){
-                    if (l>0){
-                        //kk = 1-kk;
+                    if (l<0){
+                        // and all the stars! that never were! are parking cars and topping gas!
                         //jj = 1-jj;
-                        
+                        //kk=1-jj;
                     }
                     if (x1>x2){
                         for (int x=0; x<(int)(x1-x2);x++){
                             //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
                             double ll = ((double)x) / Math.abs(x1-x2);
-                            double z = (vv3.z)*(jj) + (vv1.z*ll + vv2.z*(1-ll))*kk;
-                            int zf = 255-(int)Math.min(255,(z)*0.8-80);
+                            double z = (vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj;
+                            //double z = (vv2.z)*(jj) + (vv3.z*(ll) + vv1.z*(1-ll))*kk;
+                            int zf = 255-(int)Math.min(255,(z)*0.75-80);
                             int xf = x+x2;
                             if (xf>=0 && xf<size.x){
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
@@ -120,8 +121,9 @@ public class Renderer{
                         for (int x=0; x<(int)(x2-x1);x++){
                             //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
                             double ll = ((double)x) / Math.abs(x1-x2);
-                            double z = (vv3.z)*(jj) + (vv2.z*ll + vv1.z*(1-ll))*kk;
-                            int zf = 255-(int)Math.min(255,(z)*0.8-80);
+                            double z = (vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj;
+                            //double z = (vv2.z)*(jj) + (vv3.z*(1-ll) + vv1.z*(ll))*kk;
+                            int zf = 255-(int)Math.min(255,(z)*0.75-80);
                             int xf = x+x1;
                             if (xf>=0 && xf<size.x){
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
