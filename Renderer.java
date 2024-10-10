@@ -6,7 +6,7 @@ public class Renderer{
     public Camera camera = null;
     public BaseReal genesis = null;
     public IntVector2 size = new IntVector2(1024,512);
-    public BufferedImage buh = new BufferedImage(size.x,size.y,BufferedImage.TYPE_BYTE_GRAY);
+    public BufferedImage buh = new BufferedImage(size.x,size.y,BufferedImage.TYPE_BYTE_GRAY); //TYPE_BYTE_GRAY
     private Boolean ZBMode = false;
 
     public Renderer(int w,int h, BaseReal sgenesis, Camera scamera){
@@ -31,7 +31,7 @@ public class Renderer{
             Vector3[] projects= {new Vector3(),new Vector3(),new Vector3(),new Vector3()};
 
             for (int vi=0;vi<3; vi++){
-                Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]-1);
+                Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]);
                 Vector3 projected = camera.Project(cube.transform.MultiplyWV(cver.p));//cube.transform.MultiplyWV(cver.p));
 
                 projects[vi]=new Vector3(projected.x+size.x*0.5,projected.y+size.y*0.5,projected.z);
@@ -47,10 +47,10 @@ public class Renderer{
             Vector3[] projects= {new Vector3(),new Vector3(),new Vector3(),new Vector3()};
             IntVector2[] IVprojects= {new IntVector2(),new IntVector2(),new IntVector2(),new IntVector2()};
 
-            //System.out.println(cface.vertices);
+            //System.out.println(i);
 
             for (int vi=0;vi<3; vi++){
-                Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]-1);
+                Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]);
                 Vector3 projected = camera.Project(cube.transform.MultiplyWV(cver.p));//cube.transform.MultiplyWV(cver.p));
 
                 //projects[vi]=new IntVector2((int)(projected.x)+(int)(size.x*0.5),(int)(projected.y)+(int)(size.y*0.5));
@@ -68,9 +68,9 @@ public class Renderer{
             g.drawString("v "+cface.vertices[0]+" "+projects[0].z,IVprojects[0].x,IVprojects[0].y);
             g.drawString("v "+cface.vertices[1]+" "+projects[1].z,IVprojects[1].x,IVprojects[1].y);
             g.drawString("v "+cface.vertices[2]+" "+projects[2].z,IVprojects[2].x,IVprojects[2].y);
-            /*g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
+            g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[1].x, IVprojects[1].y);
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[2].x, IVprojects[2].y);
-            g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);*/
+            g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);
         }
     }
 
@@ -113,6 +113,7 @@ public class Renderer{
                             int zf = 255-(int)Math.min(255,(z)*0.75-80);
                             int xf = x+x2;
                             if (xf>=0 && xf<size.x){
+                                System.out.println(buh.getRGB(xf,yop));
                                 buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }

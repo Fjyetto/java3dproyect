@@ -36,6 +36,7 @@ public class thing extends JFrame {
         Mesh cube = null;
         try{
             //cube = Mesh.FromOBJ("JohnCube.obj");
+            //cube = Mesh.FromOBJ("JohnCubeNLessTLess.obj");
             cube = Mesh.FromOBJ("FourTris.obj");
             //cube = Mesh.FromOBJ("SimpleTri.obj");
         } catch (FileNotFoundException e){
@@ -78,7 +79,7 @@ public class thing extends JFrame {
                 delta += (now-lastTime)/ns;
                 lastTime = now;
                 while (delta>=1){
-                    //rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.03)));
+                    rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.03)));
                     //System.out.println(thingy.x);
                     uh.repaint(0,0,size.x,size.y);
                     delta--;

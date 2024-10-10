@@ -50,9 +50,9 @@ public class Mesh{
                             break;
                         case "f":
                             if (tokens.length>=4){
-                                int vertl[] = new int[3];
-                                int verttl[] = new int[3];
-                                int vertnl[] = new int[3];
+                                int vertl[] = new int[3]; // Vert list
+                                int verttl[] = new int[3]; // Vert UV list
+                                int vertnl[] = new int[3]; // Vert normal list
                                 int ti = 0;
 
                                 for (String ctok: tokens){
@@ -61,26 +61,26 @@ public class Mesh{
                                         continue;
                                     }
                                     String[] parts=ctok.split("/");
+                                    //System.out.println(ctok+' '+parts[0]+' '+parts[1]+' '+parts[2]);
                                     switch(parts.length){
                                         case 1:
-                                            vertl[ti]=Integer.valueOf(parts[0]);
-                                            if (Integer.valueOf(parts[0])>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
+                                            vertl[ti]=Integer.valueOf(parts[0])-1;
+                                            if (Integer.valueOf(parts[0])-1>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
                                             break;
                                         case 2:
-                                            vertl[ti]=Integer.valueOf(parts[0]);
-                                            if (Integer.valueOf(parts[0])>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
-                                            verttl[ti]=Integer.valueOf(parts[1]);
+                                            vertl[ti]=Integer.valueOf(parts[0])-1;
+                                            if (Integer.valueOf(parts[0])-1>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
+                                            verttl[ti]=Integer.valueOf(parts[1])-1;
                                             break;
-                                        case 4:
                                         case 3:
-                                            vertl[ti]=Integer.valueOf(parts[0]);
-                                            if (Integer.valueOf(parts[0])>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
+                                            vertl[ti]=Integer.valueOf(parts[0])-1;
+                                            if (Integer.valueOf(parts[0])-1>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
                                             try{
-                                                verttl[ti]=Integer.valueOf(parts[1]);
+                                                //verttl[ti]=Integer.valueOf(parts[1])-1;
                                             } catch (NumberFormatException e) {
-                                                verttl[ti]=0;
+                                                //verttl[ti]=0;
                                             }
-                                            vertnl[ti]=Integer.valueOf(parts[2]);
+                                            //vertnl[ti]=Integer.valueOf(parts[2])-1;
                                             break;
                                     }
                                     ti+=1;
