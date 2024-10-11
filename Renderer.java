@@ -7,6 +7,7 @@ public class Renderer{
     public BaseReal genesis = null;
     public IntVector2 size = new IntVector2(1024,512);
     public BufferedImage buh = new BufferedImage(size.x,size.y,BufferedImage.TYPE_BYTE_GRAY); //TYPE_BYTE_GRAY
+    public BufferedImage finalf = new BufferedImage(size.x,size.y,BufferedImage.TYPE_INT_RGB); //TYPE_BYTE_GRAY
     private Boolean ZBMode = false;
 
     public Renderer(int w,int h, BaseReal sgenesis, Camera scamera){
@@ -21,6 +22,7 @@ public class Renderer{
         for (int x=0;x<size.x;x++){
             for (int y=0;y<size.y;y++){
                 buh.setRGB(x, y, 255+255*256+255*256*256);
+                finalf.setRGB(x, y, 255+255*256+255*256*256);
             }
         }
 
@@ -41,7 +43,7 @@ public class Renderer{
             splitTriangle(g, projects[0], projects[1], projects[2]);
         }
 
-        g.drawImage(buh,0,0,null);
+        //g.drawImage(buh,0,0,null);
         ZBMode = false;
         for (int i=0;i<cube.mesh.faces.size(); i++){
             Face cface = cube.mesh.faces.get(i);
@@ -63,7 +65,7 @@ public class Renderer{
                 }
             }
 
-            //splitTriangle(g, projects[0], projects[1], projects[2]);
+            splitTriangle(g, projects[0], projects[1], projects[2]);
 
             g.setColor(Color.BLUE);
             g.drawString("v "+cface.vertices[0]+" "+projects[0].z,IVprojects[0].x,IVprojects[0].y);
@@ -73,6 +75,7 @@ public class Renderer{
             g.drawLine(IVprojects[0].x, IVprojects[0].y, IVprojects[2].x, IVprojects[2].y);
             g.drawLine(IVprojects[2].x, IVprojects[2].y, IVprojects[1].x, IVprojects[1].y);
         }
+        g.drawImage(finalf,0,0,null);
     }
 
     public void fillTopTriangle(Graphics g, Vector3 vv1, Vector3 vv2, Vector3 vv3){
@@ -100,11 +103,6 @@ public class Renderer{
             
             if (ZBMode){
                 if (yop>=0 && yop<size.y){
-                    if (l<0){
-                        // and all the stars! that never were! are parking cars and topping gas!
-                        //jj = 1-jj;
-                        //kk=1-jj;
-                    }
                     if (x1>x2){
                         for (int x=0; x<(int)(x1-x2);x++){
                             //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
@@ -135,22 +133,33 @@ public class Renderer{
                     }
                 }
             }else{
-                g.drawLine(x2,yop,x1,yop);
-                /*if (x1>x2){
+                if (x1>x2){
                     for (int x=0; x<(int)(x1-x2);x++){
-                        int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
-                        if (buh.getRGB(x+x1,yop)==zf+zf*256+zf*256*256){
-                            g.drawLine(x+x1, yop, x+x1, yop);
+                        double ll = ((double)x) / Math.abs(x1-x2);
+                        double z = (vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj;
+                        int zf = (int)Math.min(255,(z*0.5)-300);
+                        int zc = zf+zf*256+zf*256*256;
+                        int xf = x+x2;
+
+                        if (xf>=0 && xf<size.x && buh.getRGB(xf,yop)>=zc){
+                            finalf.setRGB(xf,yop,255);
                         }
                     }
+                    g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                 }else{
                     for (int x=0; x<(int)(x2-x1);x++){
-                        int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
-                        if (x+x1>=0 && x+x1<size.x){
-                            buh.setRGB(x+x1,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(x+x1,yop)));
+                        double ll = ((double)x) / Math.abs(x1-x2);
+                        double z = (vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj;
+                        int zf = (int)Math.min(255,(z*0.5)-300);
+                        int zc = zf+zf*256+zf*256*256;
+                        int xf = x+x1;
+
+                        if (xf>=0 && xf<size.x && buh.getRGB(xf,yop)>=zc){
+                            finalf.setRGB(xf,yop,255*256);
                         }
                     }
-                }*/
+                    g.drawString("vm "+vv2.z,v2.x-40,v2.y);
+                }
             }
         }
     }
