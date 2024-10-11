@@ -1,13 +1,16 @@
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.nio.FloatBuffer;
 
 public class Renderer{
     public Camera camera = null;
     public BaseReal genesis = null;
     public IntVector2 size = new IntVector2(1024,512);
-    public BufferedImage buh = new BufferedImage(size.x,size.y,BufferedImage.TYPE_BYTE_GRAY); //TYPE_BYTE_GRAY
+    public FloatBuffer buh = FloatBuffer.allocate(size.x*size.y);
     public BufferedImage finalf = new BufferedImage(size.x,size.y,BufferedImage.TYPE_INT_RGB); //TYPE_BYTE_GRAY
+    public Float minbf = Float.POSITIVE_INFINITY;
+    public Float maxbf = Float.NEGATIVE_INFINITY;
     private Boolean ZBMode = false;
 
     public Renderer(int w,int h, BaseReal sgenesis, Camera scamera){
@@ -21,7 +24,7 @@ public class Renderer{
 
         for (int x=0;x<size.x;x++){
             for (int y=0;y<size.y;y++){
-                buh.setRGB(x, y, 255+255*256+255*256*256);
+                buh.put(x+y*size.x, 1024.0f);
                 finalf.setRGB(x, y, 255+255*256+255*256*256);
             }
         }
@@ -102,60 +105,82 @@ public class Renderer{
             int yop = (int) (v1.y-Math.copySign(y, l));
             
             if (ZBMode){
+                //minbf = Float.POSITIVE_INFINITY;
+                //maxbf = Float.NEGATIVE_INFINITY;
                 if (yop>=0 && yop<size.y){
                     if (x1>x2){
                         for (int x=0; x<(int)(x1-x2);x++){
                             //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
                             double ll = ((double)x) / Math.abs(x1-x2);
                             double z = (vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj;
-                            //double z = (vv2.z)*(jj) + (vv3.z*(ll) + vv1.z*(1-ll))*kk;
-                            int zf = (int)Math.min(255,(z*0.5)-300);
+                            //int zf = (int)Math.min(255,(z*0.5)-300);
                             int xf = x+x2;
-                            if (xf>=0 && xf<size.x){
-                                //System.out.println(buh.getRGB(xf,yop));
-                                buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
+                            if (xf>=0 && xf<size.x && yop>=0 && yop<size.y){
+                                /*if (zf<200) System.out.println(buh.getRGB(xf,yop));
+                                buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));*/
+                                buh.put(xf+yop*size.x,Math.min((float)z,buh.get(xf+yop*size.x)));
+                                minbf = (float)Math.min(minbf,z);
+
+                                maxbf = (float)Math.max(maxbf,z);
                             }
                         }
-                        g.drawString("vm "+vv2.z,v2.x-40,v2.y);
+                        //g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                     }else{
                         for (int x=0; x<(int)(x2-x1);x++){
                             //int zf = 255-(int)Math.min(255,((kk*vv3.z+jj*vv1.z))*0.75-160);
                             double ll = ((double)x) / Math.abs(x1-x2);
                             double z = (vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj;
-                            //double z = (vv2.z)*(jj) + (vv3.z*(1-ll) + vv1.z*(ll))*kk;
-                            int zf = (int)Math.min(255,(z*0.5)-300);
+                            //int zf = (int)Math.min(255,(z*0.5)-300);
                             int xf = x+x1;
-                            if (xf>=0 && xf<size.x){
-                                buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
+                            if (xf>=0 && xf<size.x && yop>=0 && yop<size.y){
+                                //buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
+                                buh.put(xf+yop*size.x,Math.min((float)z,buh.get(xf+yop*size.x)));
+                                minbf = Math.min(minbf,(float)z);
+                                maxbf = Math.max(maxbf,(float)z);
+                                /*System.out.println("brah:! ");
+                                System.out.println(z);
+                                System.out.println(maxbf);*/
                             }
                         }
-                        g.drawString("vm "+vv2.z,v2.x-40,v2.y);
+                        //g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                     }
                 }
             }else{
                 if (x1>x2){
                     for (int x=0; x<(int)(x1-x2);x++){
                         double ll = ((double)x) / Math.abs(x1-x2);
-                        double z = (vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj;
+                        float z = (float)((vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj);
                         int zf = (int)Math.min(255,(z*0.5)-300);
                         int zc = zf+zf*256+zf*256*256;
                         int xf = x+x2;
 
-                        if (xf>=0 && xf<size.x && buh.getRGB(xf,yop)>=zc){
-                            finalf.setRGB(xf,yop,255);
+                        float rage = maxbf-minbf;
+                        float v = ((buh.get(xf+yop)-minbf)/rage);
+
+                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop)>=z){
+                            //finalf.setRGB(xf,yop,255);
+                            finalf.setRGB(xf,yop,(int)(v*256));
                         }
                     }
                     g.drawString("vm "+vv2.z,v2.x-40,v2.y);
                 }else{
                     for (int x=0; x<(int)(x2-x1);x++){
                         double ll = ((double)x) / Math.abs(x1-x2);
-                        double z = (vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj;
+                        float z = (float)((vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj);
                         int zf = (int)Math.min(255,(z*0.5)-300);
                         int zc = zf+zf*256+zf*256*256;
                         int xf = x+x1;
 
-                        if (xf>=0 && xf<size.x && buh.getRGB(xf,yop)>=zc){
-                            finalf.setRGB(xf,yop,255*256);
+                        float rage = maxbf-minbf;
+                        float v = ((buh.get(xf+yop)-minbf)/rage);
+
+                        /*System.out.println(maxbf);
+                        System.out.println(minbf);*/
+                        System.out.println(v);
+                        
+                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop)>=z){
+                            //finalf.setRGB(xf,yop,255*256);
+                            finalf.setRGB(xf,yop,(int)(v*256));
                         }
                     }
                     g.drawString("vm "+vv2.z,v2.x-40,v2.y);
