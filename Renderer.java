@@ -20,7 +20,7 @@ public class Renderer{
 
         for (int x=0;x<size.x;x++){
             for (int y=0;y<size.y;y++){
-                buh.setRGB(x, y, 0);
+                buh.setRGB(x, y, 255+255*256+255*256*256);
             }
         }
 
@@ -28,7 +28,8 @@ public class Renderer{
         ZBMode=true;
         for (int i=0;i<cube.mesh.faces.size(); i++){ // first pass to make zbuffer
             Face cface = cube.mesh.faces.get(i);
-            Vector3[] projects= {new Vector3(),new Vector3(),new Vector3(),new Vector3()};
+
+            Vector3[] projects= {new Vector3(),new Vector3(),new Vector3()};
 
             for (int vi=0;vi<3; vi++){
                 Vertex cver = cube.mesh.vertices.get(cface.vertices[vi]);
@@ -110,11 +111,11 @@ public class Renderer{
                             double ll = ((double)x) / Math.abs(x1-x2);
                             double z = (vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj;
                             //double z = (vv2.z)*(jj) + (vv3.z*(ll) + vv1.z*(1-ll))*kk;
-                            int zf = 255-(int)Math.min(255,(z)*0.75-80);
+                            int zf = (int)Math.min(255,(z*0.5)-300);
                             int xf = x+x2;
                             if (xf>=0 && xf<size.x){
-                                System.out.println(buh.getRGB(xf,yop));
-                                buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
+                                //System.out.println(buh.getRGB(xf,yop));
+                                buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }
                         g.drawString("vm "+vv2.z,v2.x-40,v2.y);
@@ -124,10 +125,10 @@ public class Renderer{
                             double ll = ((double)x) / Math.abs(x1-x2);
                             double z = (vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj;
                             //double z = (vv2.z)*(jj) + (vv3.z*(1-ll) + vv1.z*(ll))*kk;
-                            int zf = 255-(int)Math.min(255,(z)*0.75-80);
+                            int zf = (int)Math.min(255,(z*0.5)-300);
                             int xf = x+x1;
                             if (xf>=0 && xf<size.x){
-                                buh.setRGB(xf,yop,Math.max(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
+                                buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                             }
                         }
                         g.drawString("vm "+vv2.z,v2.x-40,v2.y);
