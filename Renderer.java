@@ -43,7 +43,8 @@ public class Renderer{
                 projects[vi]=new Vector3(projected.x+size.x*0.5,projected.y+size.y*0.5,projected.z);
             }
 
-            splitTriangle(g, projects[0], projects[1], projects[2]);
+            Vector2 uvs[] = {cube.mesh.vtexcoords.get(cface.vtexcoords[0]),cube.mesh.vtexcoords.get(cface.vtexcoords[1]),cube.mesh.vtexcoords.get(cface.vtexcoords[2])};
+            splitTriangle(g, projects[0], projects[1], projects[2],cube.mesh.shader, uvs);
         }
 
         //g.drawImage(buh,0,0,null);
@@ -68,7 +69,8 @@ public class Renderer{
                 }
             }
 
-            splitTriangle(g, projects[0], projects[1], projects[2]);
+            Vector2 uvs[] = {cube.mesh.vtexcoords.get(cface.vtexcoords[0]),cube.mesh.vtexcoords.get(cface.vtexcoords[1]),cube.mesh.vtexcoords.get(cface.vtexcoords[2])};
+            splitTriangle(g, projects[0], projects[1], projects[2],cube.mesh.shader, uvs);
 
             g.setColor(Color.BLUE);
             g.drawString("v "+cface.vertices[0]+" "+projects[0].z,IVprojects[0].x,IVprojects[0].y);
@@ -81,7 +83,7 @@ public class Renderer{
         g.drawImage(finalf,0,0,null);
     }
 
-    public void fillTopTriangle(Graphics g, Vector3 vv1, Vector3 vv2, Vector3 vv3){
+    public void fillTopTriangle(Graphics g, Vector3 vv1, Vector3 vv2, Vector3 vv3, Shader shader, Vector2[] UVs){
 
         // vv1.y == vv2.y
 
@@ -154,12 +156,17 @@ public class Renderer{
                         int zc = zf+zf*256+zf*256*256;
                         int xf = x+x2;
 
-                        float rage = maxbf-minbf;
-                        float v = ((buh.get(xf+yop)-minbf)/rage);
+                        //float rage = maxbf-minbf;
+                        //float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
+                        Vector2 UVP = UVs[2].Multiply(kk).Plus(
+                            UVs[0].Multiply(ll).Plus(UVs[1].Multiply(1-ll)).Multiply(jj)
+                        );
 
-                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop)>=z){
+                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0){
+                            //UVP.print();
+                            finalf.setRGB(xf, yop, shader.shade(UVP,new IntVector2(xf/4,yop/4)));
                             //finalf.setRGB(xf,yop,255);
-                            finalf.setRGB(xf,yop,(int)(v*256));
+                            //finalf.setRGB(xf,yop,(int)(v*256));
                         }
                     }
                     g.drawString("vm "+vv2.z,v2.x-40,v2.y);
@@ -171,16 +178,22 @@ public class Renderer{
                         int zc = zf+zf*256+zf*256*256;
                         int xf = x+x1;
 
+                        Vector2 UVP = UVs[2].Multiply(kk).Plus(
+                            UVs[0].Multiply(1-ll).Plus(UVs[1].Multiply(ll)).Multiply(jj)
+                        );
+
                         float rage = maxbf-minbf;
-                        float v = ((buh.get(xf+yop)-minbf)/rage);
+                        float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
 
                         /*System.out.println(maxbf);
                         System.out.println(minbf);*/
-                        System.out.println(v);
+                        //System.out.println(v);
                         
-                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop)>=z){
+                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0){
+                            finalf.setRGB(xf, yop, shader.shade(UVP,new IntVector2(xf/4+1,yop/4)));
                             //finalf.setRGB(xf,yop,255*256);
-                            finalf.setRGB(xf,yop,(int)(v*256));
+                            //finalf.setRGB(xf,yop,(int)(v*256));
+                            
                         }
                     }
                     g.drawString("vm "+vv2.z,v2.x-40,v2.y);
@@ -189,15 +202,15 @@ public class Renderer{
         }
     }
 
-    public void splitTriangle(Graphics g, Vector3 v1, Vector3 v2, Vector3 v3){
+    public void splitTriangle(Graphics g, Vector3 v1, Vector3 v2, Vector3 v3, Shader shader, Vector2[] UVs){
 
         g.setColor(Color.GREEN);
         if (v1.y==v2.y){
-            fillTopTriangle(g, v1, v2, v3);
+            fillTopTriangle(g, v1, v2, v3, shader, UVs);
         }else if(v1.y==v3.y){
-            fillTopTriangle(g, v1, v3, v2);
+            fillTopTriangle(g, v1, v3, v2, shader, UVs);
         }else if(v2.y==v3.y){
-            fillTopTriangle(g, v2, v3, v1);
+            fillTopTriangle(g, v2, v3, v1, shader, UVs);
         }else{
             g.setColor(Color.CYAN);
             if ((v2.y<v1.y && v2.y>v3.y) || (v2.y>v1.y && v2.y<v3.y)){ // v2 between v1 and v3
@@ -214,9 +227,12 @@ public class Renderer{
                     v2.y,
                     1/(hfl*(1/v1.z)+(1-hfl)*(1/v3.z))
                     );
-                fillTopTriangle(g, v2, vm, v3);
+                Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
+                Vector2 newuv[] = {uvm,UVs[1],UVs[2]};
+                
+                fillTopTriangle(g, v2, vm, v3, shader, newuv);
                 g.setColor(Color.RED);
-                fillTopTriangle(g, v2, vm, v1);
+                fillTopTriangle(g, v2, vm, v1, shader, newuv);
             }else if ((v3.y<v1.y && v3.y>v2.y) || (v3.y>v1.y && v3.y<v2.y)){ // v3 between v1 and v2
                 // og is v2
                 double hfl = (v3.y-v2.y)/(v1.y-v2.y);
@@ -230,9 +246,13 @@ public class Renderer{
                     v3.y,
                     1/((hfl*(1/v1.z)+(1-hfl)*(1/v2.z)))
                     );
-                fillTopTriangle(g, v3, vm, v1);
+
+                Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
+                Vector2 newuv[] = {uvm,UVs[2],UVs[0]};
+                
+                fillTopTriangle(g, v3, vm, v1, shader, newuv);
                 g.setColor(Color.RED);
-                fillTopTriangle(g, v3, vm, v2);
+                fillTopTriangle(g, v3, vm, v2, shader, newuv);
             }else{ // v1 between v3 and v2
                 // og is v3
                 double hfl = (v1.y-v3.y)/(v2.y-v3.y);
@@ -246,9 +266,13 @@ public class Renderer{
                     v1.y,
                     1/((hfl*(1/v2.z)+(1-hfl)*(1/v3.z)))
                     );
-                fillTopTriangle(g, v1, vm, v2);
+
+                Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
+                Vector2 newuv[] = {uvm,UVs[0],UVs[1]};
+
+                fillTopTriangle(g, v1, vm, v2, shader, newuv);
                 g.setColor(Color.RED);
-                fillTopTriangle(g, v1, vm, v3);
+                fillTopTriangle(g, v1, vm, v3, shader, newuv);
             }
         }
     }

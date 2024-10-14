@@ -34,4 +34,8 @@ public class Vector2 {
 		Vector2 res = new Vector2(x*other.x,y*other.y);
 		return res;
 	}
+	public void print(){
+		System.out.print(x+", ");
+		System.out.println(y);
+	}
 }

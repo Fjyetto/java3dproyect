@@ -1,5 +1,5 @@
 public class Face {
-    public int vertices[]      =new int[3];
+    public int vertices[]     =new int[3];
     public int vtexcoords[]   =new int[3];
     public int vertexnormals[]=new int[3];
 

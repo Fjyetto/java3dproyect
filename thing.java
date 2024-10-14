@@ -35,8 +35,8 @@ public class thing extends JFrame {
 
         Mesh cube = null;
         try{
-            cube = Mesh.FromOBJ("JohnCube.obj");
-            //cube = Mesh.FromOBJ("JohnCubeNLessTLess.obj");
+            //cube = Mesh.FromOBJ("JohnCube.obj");
+            cube = Mesh.FromOBJ("JohnCubeNLessTLess.obj");
             //cube = Mesh.FromOBJ("FourTris.obj");
             //cube = Mesh.FromOBJ("SimpleTri.obj");
         } catch (FileNotFoundException e){

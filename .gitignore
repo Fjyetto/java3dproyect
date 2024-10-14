@@ -19,3 +19,4 @@ MPanel.class
 IntVector2.class
 Renderer.class
 FloatImage.class
+Shader.class

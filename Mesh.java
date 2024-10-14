@@ -8,6 +8,7 @@ public class Mesh{
     public ArrayList<Vector3> vertexnormals = new ArrayList<Vector3>();
     public ArrayList<Vector2> vtexcoords = new ArrayList<Vector2>();
     public ArrayList<Face> faces = new ArrayList<Face>();
+    public Shader shader = new Shader();
 
     public Mesh(){
         //super("Mesh");
@@ -76,11 +77,11 @@ public class Mesh{
                                             vertl[ti]=Integer.valueOf(parts[0])-1;
                                             if (Integer.valueOf(parts[0])-1>imported.vertices.size()) System.out.println("THIS INDEX "+parts[0]+" IS OUT OF THE RANGE "+imported.vertices.size());
                                             try{
-                                                //verttl[ti]=Integer.valueOf(parts[1])-1;
+                                                verttl[ti]=Integer.valueOf(parts[1])-1;
                                             } catch (NumberFormatException e) {
-                                                //verttl[ti]=0;
+                                                verttl[ti]=0;
                                             }
-                                            //vertnl[ti]=Integer.valueOf(parts[2])-1;
+                                            vertnl[ti]=Integer.valueOf(parts[2])-1;
                                             break;
                                     }
                                     ti+=1;
@@ -97,6 +98,8 @@ public class Mesh{
             System.out.println("Error occured");
             e.printStackTrace();
         }
+        imported.vtexcoords.forEach((n)->n.print());
+        System.out.println(imported.vtexcoords.size());
         return imported;
     }
 }
