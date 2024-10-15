@@ -87,6 +87,8 @@ public class Renderer{
 
         // vv1.y == vv2.y
 
+        if (vv1.z<0 || vv3.z<0) return;
+
         IntVector2 v1 = new IntVector2((int)vv1.x,(int)vv1.y);
         IntVector2 v2 = new IntVector2((int)vv2.x,(int)vv2.y);
         IntVector2 v3 = new IntVector2((int)vv3.x,(int)vv3.y);
@@ -117,7 +119,7 @@ public class Renderer{
                             double z = (vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj;
                             //int zf = (int)Math.min(255,(z*0.5)-300);
                             int xf = x+x2;
-                            if (xf>=0 && xf<size.x && yop>=0 && yop<size.y){
+                            if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && z>30){
                                 /*if (zf<200) System.out.println(buh.getRGB(xf,yop));
                                 buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));*/
                                 buh.put(xf+yop*size.x,Math.min((float)z,buh.get(xf+yop*size.x)));
@@ -134,7 +136,7 @@ public class Renderer{
                             double z = (vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj;
                             //int zf = (int)Math.min(255,(z*0.5)-300);
                             int xf = x+x1;
-                            if (xf>=0 && xf<size.x && yop>=0 && yop<size.y){
+                            if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && z>30){
                                 //buh.setRGB(xf,yop,Math.min(zf+zf*256+zf*256*256,buh.getRGB(xf,yop)));
                                 buh.put(xf+yop*size.x,Math.min((float)z,buh.get(xf+yop*size.x)));
                                 minbf = Math.min(minbf,(float)z);
@@ -156,13 +158,14 @@ public class Renderer{
                         int zc = zf+zf*256+zf*256*256;
                         int xf = x+x2;
 
-                        //float rage = maxbf-minbf;
-                        //float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
+                        
                         Vector2 UVP = UVs[2].Multiply(kk).Plus(
                             UVs[0].Multiply(ll).Plus(UVs[1].Multiply(1-ll)).Multiply(jj)
                         );
 
-                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0){
+                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0 && z>30){
+                            //float rage = maxbf-minbf;
+                            //float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
                             //UVP.print();
                             finalf.setRGB(xf, yop, shader.shade(UVP,new IntVector2(xf/4,yop/4)));
                             //finalf.setRGB(xf,yop,255);
@@ -182,14 +185,13 @@ public class Renderer{
                             UVs[0].Multiply(1-ll).Plus(UVs[1].Multiply(ll)).Multiply(jj)
                         );
 
-                        float rage = maxbf-minbf;
-                        float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
-
                         /*System.out.println(maxbf);
                         System.out.println(minbf);*/
                         //System.out.println(v);
                         
-                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0){
+                        if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0 && z>30){
+                            //float rage = maxbf-minbf;
+                            //float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
                             finalf.setRGB(xf, yop, shader.shade(UVP,new IntVector2(xf/4+1,yop/4)));
                             //finalf.setRGB(xf,yop,255*256);
                             //finalf.setRGB(xf,yop,(int)(v*256));

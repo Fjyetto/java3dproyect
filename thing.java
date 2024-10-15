@@ -36,15 +36,15 @@ public class thing extends JFrame {
         Mesh cube = null;
         try{
             //cube = Mesh.FromOBJ("JohnCube.obj");
-            cube = Mesh.FromOBJ("JohnCubeNLessTLess.obj");
+            //cube = Mesh.FromOBJ("JohnCubeNLessTLess.obj");
             //cube = Mesh.FromOBJ("FourTris.obj");
-            //cube = Mesh.FromOBJ("SimpleTri.obj");
+            cube = Mesh.FromOBJ("peenilewonderlandtriangulated.obj");
         } catch (FileNotFoundException e){
             System.err.println(e);
         }
 
         RealMesh realcube = new RealMesh(cube);
-        realcube.transform.FromAxisRotation('y', Math.PI/2.0);
+        realcube.transform.FromAxisRotation('y', Math.PI);
         genesis.Append(realcube); // JohnCube the second child of genesis
 
         setTitle("Test");
@@ -79,9 +79,9 @@ public class thing extends JFrame {
                 delta += (now-lastTime)/ns;
                 lastTime = now;
                 while (delta>=1){
-                    rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.006)));
                     //System.out.println(thingy.x);
                     uh.repaint(0,0,size.x,size.y);
+                    rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.001)));
                     delta--;
                 }
             }
@@ -114,13 +114,13 @@ public class thing extends JFrame {
             //System.out.println(key);
             switch(key){
                 case KeyEvent.VK_RIGHT:
-                    move.FromVector3(new Vector3(-speed,0.0,0.0));
+                    move.FromVector3(new Vector3(speed,0.0,0.0));
                     move = camera.transform.GetRot().Multiply(move).GetTra();
                     //move = move.Multiply(camera.transform.GetRot()).GetTra();
                     camera.setTransform(camera.transform.Multiply(move));
                     break;
                 case KeyEvent.VK_LEFT:
-                    move.FromVector3(new Vector3(speed,0.0,0.0));
+                    move.FromVector3(new Vector3(-speed,0.0,0.0));
                     move = camera.transform.GetRot().Multiply(move).GetTra();
                     //move = move.Multiply(camera.transform.GetRot()).GetTra();
                     camera.setTransform(camera.transform.Multiply(move));
