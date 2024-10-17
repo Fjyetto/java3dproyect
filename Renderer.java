@@ -154,16 +154,16 @@ public class Renderer{
                     for (int x=0; x<(int)(x1-x2);x++){
                         double ll = ((double)x) / Math.abs(x1-x2);
                         float z = (float)((vv3.z)*(kk) + (vv1.z*(ll) + vv2.z*(1-ll))*jj);
-                        int zf = (int)Math.min(255,(z*0.5)-300);
-                        int zc = zf+zf*256+zf*256*256;
+                        //int zf = (int)Math.min(255,(z*0.5)-300);
+                        //int zc = zf+zf*256+zf*256*256;
                         int xf = x+x2;
 
-                        
-                        Vector2 UVP = UVs[2].Multiply(kk).Plus(
-                            UVs[0].Multiply(ll).Plus(UVs[1].Multiply(1-ll)).Multiply(jj)
-                        );
-
                         if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0 && z>30){
+
+                            Vector2 UVP = UVs[2].Multiply(kk).Plus(
+                                UVs[0].Multiply(ll).Plus(UVs[1].Multiply(1-ll)).Multiply(jj)
+                            );
+
                             //float rage = maxbf-minbf;
                             //float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
                             //UVP.print();
@@ -177,19 +177,20 @@ public class Renderer{
                     for (int x=0; x<(int)(x2-x1);x++){
                         double ll = ((double)x) / Math.abs(x1-x2);
                         float z = (float)((vv3.z)*(kk) + (vv1.z*(1-ll) + vv2.z*(ll))*jj);
-                        int zf = (int)Math.min(255,(z*0.5)-300);
-                        int zc = zf+zf*256+zf*256*256;
+                        //int zf = (int)Math.min(255,(z*0.5)-300);
+                        //int zc = zf+zf*256+zf*256*256;
                         int xf = x+x1;
-
-                        Vector2 UVP = UVs[2].Multiply(kk).Plus(
-                            UVs[0].Multiply(1-ll).Plus(UVs[1].Multiply(ll)).Multiply(jj)
-                        );
 
                         /*System.out.println(maxbf);
                         System.out.println(minbf);*/
                         //System.out.println(v);
                         
                         if (xf>=0 && xf<size.x && yop>=0 && yop<size.y && buh.get(xf+yop*size.x)>=z-4.0 && z>30){
+
+                            Vector2 UVP = UVs[2].Multiply(kk).Plus(
+                                UVs[0].Multiply(1-ll).Plus(UVs[1].Multiply(ll)).Multiply(jj)
+                            );
+
                             //float rage = maxbf-minbf;
                             //float v = ((buh.get(xf+yop*size.x)-minbf)/rage);
                             finalf.setRGB(xf, yop, shader.shade(UVP,new IntVector2(xf/4+1,yop/4)));

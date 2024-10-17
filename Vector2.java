@@ -34,6 +34,9 @@ public class Vector2 {
 		Vector2 res = new Vector2(x*other.x,y*other.y);
 		return res;
 	}
+	public Vector2 Invert(){
+		return new Vector2(1.0/x,1.0/y);
+	}
 	public void print(){
 		System.out.print(x+", ");
 		System.out.println(y);

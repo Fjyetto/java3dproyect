@@ -46,7 +46,9 @@ public class thing extends JFrame {
             System.err.println(e);
         }
 
-        URL url = this.getClass().getResource("cobg.bmp");
+        URL url = this.getClass().getResource("checker.png");
+        //URL url = this.getClass().getResource("cobg.bmp");
+        //URL url = this.getClass().getResource("liver.jpg");
         try {
             cube.shader.Albedo = ImageIO.read(url);
         } catch (IOException e){

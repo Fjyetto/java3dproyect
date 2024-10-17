@@ -13,8 +13,8 @@ public class Shader{
         //UV.print();
         //return (new Color(255*((SPos.x+SPos.y)%2), 0, 255*((SPos.x+SPos.y)%2))).getRGB();
         if (Albedo!=null){
-            int x = (int)(Albedo.getWidth()*UV.x);
-            int y = (int)(Albedo.getHeight()*(1-UV.y));
+            int x = (int)(Albedo.getWidth()*UV.x)%Albedo.getWidth();
+            int y = (int)(Albedo.getHeight()*(1-UV.y))%Albedo.getHeight();
             return Albedo.getRGB(x, y);
         }else
         {
