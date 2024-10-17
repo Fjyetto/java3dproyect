@@ -230,6 +230,11 @@ public class Renderer{
                     1/(hfl*(1/v1.z)+(1-hfl)*(1/v3.z))
                     );
                 Vector2 uvm = new Vector2(UVs[0].x*hfl+UVs[2].x*(1-hfl),UVs[0].y*hfl+UVs[2].y*(1-hfl));
+                /*double ufl = (hfl*v1.z)/((1-hfl)*v2.z+hfl*v1.z);
+                Vector2 uvm = new Vector2(
+                    ((UVs[0].x)*ufl+(1/UVs[2].x)*(1-ufl)),
+                    ((UVs[0].y)*ufl+(1/UVs[2].y)*(1-ufl))
+                    );*/
                 Vector2 newuv0[] = {UVs[1],uvm,UVs[2]};
                 Vector2 newuv1[] = {UVs[1],uvm,UVs[0]};
                 
@@ -244,6 +249,7 @@ public class Renderer{
                     v3.y,
                     (((v1.z-v2.z)*hfl)+v2.z)
                     );*/
+                
                 Vector3 vm = new Vector3(
                     ((v1.x-v2.x)*hfl)+v2.x,
                     v3.y,
@@ -251,6 +257,11 @@ public class Renderer{
                     );
 
                 Vector2 uvm = new Vector2(UVs[0].x*hfl+UVs[1].x*(1-hfl),UVs[0].y*hfl+UVs[1].y*(1-hfl));
+                /*Vector2 uvm = new Vector2(
+                    1/((1/UVs[0].x)*hfl+(1/UVs[1].x)*(1-hfl)),
+                    1/((1/UVs[0].y)*hfl+(1/UVs[1].y)*(1-hfl))
+                    );*/
+                
                 Vector2 newuv0[] = {UVs[2],uvm,UVs[0]};
                 Vector2 newuv1[] = {UVs[2],uvm,UVs[1]};
                 
@@ -272,6 +283,11 @@ public class Renderer{
                     );
 
                 Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
+                /*Vector2 uvm = new Vector2(
+                    1/((1/UVs[1].x)*hfl+(1/UVs[2].x)*(1-hfl)),
+                    1/((1/UVs[1].y)*hfl+(1/UVs[2].y)*(1-hfl))
+                    );*/
+                
                 Vector2 newuv0[] = {UVs[0],uvm,UVs[1]};
                 Vector2 newuv1[] = {UVs[0],uvm,UVs[2]};
 

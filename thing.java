@@ -147,17 +147,15 @@ public class thing extends JFrame {
                     //move = move.Multiply(camera.transform.GetRot()).GetTra();
                     camera.setTransform(camera.transform.Multiply(move));
                     break;
-                case KeyEvent.VK_NUMPAD6:
-                    
-                    //move.FromAxisRotation('y', 3.14159/20.0);
-                    //camera.setTransform(camera.transform.GetTra().Multiply(camera.transform.GetRot().Multiply(move)));
-                    //camera.setTransform(camera.transform.Multiply(move));
+                case KeyEvent.VK_PAGE_DOWN:
+                    move.FromVector3(new Vector3(0.0,speed,0.0));
+                    move = camera.transform.GetRot().Multiply(move).GetTra();
+                    camera.setTransform(camera.transform.Multiply(move));
                     break;
-                case KeyEvent.VK_NUMPAD4:
-
-                    //move.FromAxisRotation('y', -3.14159/20.0);
-                    //camera.setTransform(camera.transform.GetTra().Multiply(camera.transform.GetRot().Multiply(move)));
-                    //camera.setTransform(camera.transform.Multiply(move));
+                case KeyEvent.VK_PAGE_UP:
+                    move.FromVector3(new Vector3(0.0,-speed,0.0));
+                    move = camera.transform.GetRot().Multiply(move).GetTra();
+                    camera.setTransform(camera.transform.Multiply(move));
                     break;
             }
             System.out.println("NewcamT:");
