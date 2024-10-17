@@ -229,12 +229,13 @@ public class Renderer{
                     v2.y,
                     1/(hfl*(1/v1.z)+(1-hfl)*(1/v3.z))
                     );
-                Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
-                Vector2 newuv[] = {uvm,UVs[1],UVs[2]};
+                Vector2 uvm = new Vector2(UVs[0].x*hfl+UVs[2].x*(1-hfl),UVs[0].y*hfl+UVs[2].y*(1-hfl));
+                Vector2 newuv0[] = {UVs[1],uvm,UVs[2]};
+                Vector2 newuv1[] = {UVs[1],uvm,UVs[0]};
                 
-                fillTopTriangle(g, v2, vm, v3, shader, newuv);
+                fillTopTriangle(g, v2, vm, v3, shader, newuv0);
                 g.setColor(Color.RED);
-                fillTopTriangle(g, v2, vm, v1, shader, newuv);
+                fillTopTriangle(g, v2, vm, v1, shader, newuv1);
             }else if ((v3.y<v1.y && v3.y>v2.y) || (v3.y>v1.y && v3.y<v2.y)){ // v3 between v1 and v2
                 // og is v2
                 double hfl = (v3.y-v2.y)/(v1.y-v2.y);
@@ -249,12 +250,13 @@ public class Renderer{
                     1/((hfl*(1/v1.z)+(1-hfl)*(1/v2.z)))
                     );
 
-                Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
-                Vector2 newuv[] = {uvm,UVs[2],UVs[0]};
+                Vector2 uvm = new Vector2(UVs[0].x*hfl+UVs[1].x*(1-hfl),UVs[0].y*hfl+UVs[1].y*(1-hfl));
+                Vector2 newuv0[] = {UVs[2],uvm,UVs[0]};
+                Vector2 newuv1[] = {UVs[2],uvm,UVs[1]};
                 
-                fillTopTriangle(g, v3, vm, v1, shader, newuv);
+                fillTopTriangle(g, v3, vm, v1, shader, newuv0);
                 g.setColor(Color.RED);
-                fillTopTriangle(g, v3, vm, v2, shader, newuv);
+                fillTopTriangle(g, v3, vm, v2, shader, newuv1);
             }else{ // v1 between v3 and v2
                 // og is v3
                 double hfl = (v1.y-v3.y)/(v2.y-v3.y);
@@ -270,11 +272,12 @@ public class Renderer{
                     );
 
                 Vector2 uvm = new Vector2(UVs[1].x*hfl+UVs[2].x*(1-hfl),UVs[1].y*hfl+UVs[2].y*(1-hfl));
-                Vector2 newuv[] = {uvm,UVs[0],UVs[1]};
+                Vector2 newuv0[] = {UVs[0],uvm,UVs[1]};
+                Vector2 newuv1[] = {UVs[0],uvm,UVs[2]};
 
-                fillTopTriangle(g, v1, vm, v2, shader, newuv);
+                fillTopTriangle(g, v1, vm, v2, shader, newuv0);
                 g.setColor(Color.RED);
-                fillTopTriangle(g, v1, vm, v3, shader, newuv);
+                fillTopTriangle(g, v1, vm, v3, shader, newuv1);
             }
         }
     }

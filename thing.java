@@ -1,6 +1,7 @@
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseMotionAdapter;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 
 public class thing extends JFrame {
     public MPanel uh = null;
@@ -35,12 +38,19 @@ public class thing extends JFrame {
 
         Mesh cube = null;
         try{
-            //cube = Mesh.FromOBJ("JohnCube.obj");
-            //cube = Mesh.FromOBJ("JohnCubeNLessTLess.obj");
+            cube = Mesh.FromOBJ("JohnCube.obj");
+            //cube = Mesh.FromOBJ("SimpleTri.obj");
             //cube = Mesh.FromOBJ("FourTris.obj");
-            cube = Mesh.FromOBJ("peenilewonderlandtriangulated.obj");
+            //cube = Mesh.FromOBJ("peenilewonderlandtriangulated.obj");
         } catch (FileNotFoundException e){
             System.err.println(e);
+        }
+
+        URL url = this.getClass().getResource("cobg.bmp");
+        try {
+            cube.shader.Albedo = ImageIO.read(url);
+        } catch (IOException e){
+            System.out.println("You blew it.");
         }
 
         RealMesh realcube = new RealMesh(cube);
@@ -81,7 +91,7 @@ public class thing extends JFrame {
                 while (delta>=1){
                     //System.out.println(thingy.x);
                     uh.repaint(0,0,size.x,size.y);
-                    rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.001)));
+                    rm.setTransform(rm.transform.Multiply(new Transform().FromAxisRotation('y', delta*0.003)));
                     delta--;
                 }
             }
